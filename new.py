@@ -15,18 +15,26 @@ from pathlib import Path
     default="py",
     help="file extension",
 )
-def run(name, ext):
+@click.option(
+    "-i",
+    "--input_file",
+    is_flag=True,
+    default=False,
+    help="also create input file?",
+)
+def run(name, ext, input_file):
     if not name:
         raise Exception("'name' not provided!")
 
     target_dir = Path(os.path.abspath(__file__)).parent / "problems"
-    extensions: list[str] = ["input", ext]
+    extensions: list[str] = [ext] + (["input"] if input_file else [])
     files: list[Path] = [(target_dir / name).with_suffix(f".{ext}") for ext in extensions]
 
-    if any(f.exists() for f in files):
-        raise Exception("File(s) already exist:\n" + "\n".join(map(str, files)))
-
-    [f.write_text("", "utf-8") for f in files]
+    for f in files:
+        if not f.exists():
+            f.write_text("", "utf-8")
+        else:
+            print(f"'{str(f)}' already exists.")
 
 
 if __name__ == "__main__":
