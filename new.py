@@ -5,6 +5,17 @@ import click
 from pathlib import Path
 
 
+TEMPLATE = """\
+
+def solve(data):
+    ...
+
+if __name__ == "__main__":
+    assert solve(...) == ""
+
+"""
+
+
 @click.command
 @click.argument("name", nargs=1)
 @click.option(
@@ -32,7 +43,7 @@ def run(name, ext, input_file):
 
     for f in files:
         if not f.exists():
-            f.write_text("", "utf-8")
+            f.write_text(TEMPLATE, "utf-8")
         else:
             print(f"'{str(f)}' already exists.")
 
