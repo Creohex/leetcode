@@ -6,6 +6,8 @@ from pathlib import Path
 
 
 TEMPLATE = """\
+#!python
+
 
 def solve(data):
     ...
@@ -44,6 +46,7 @@ def run(name, ext, input_file):
     for f in files:
         if not f.exists():
             f.write_text(TEMPLATE, "utf-8")
+            f.chmod(0o744)
         else:
             print(f"'{str(f)}' already exists.")
 
